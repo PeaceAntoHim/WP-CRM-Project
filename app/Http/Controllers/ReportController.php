@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sale;
 use App\Models\Contact;
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB; // Add this line
 
 class ReportController extends Controller
 {
