@@ -2,60 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sale;
 use App\Models\Contact;
+use App\Models\Sale;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
-    // Menampilkan semua penjualan untuk kontak tertentu
-    public function index($contactId)
+    public function index()
     {
-        $contact = Contact::findOrFail($contactId);
-        return $contact->sales;
+        $sales = Sale::with('contact')->get();
+        return view('sales.index', compact('sales'));
     }
 
-    // Menyimpan penjualan baru
-    public function store(Request $request, $contactId)
+    public function create()
     {
-        $contact = Contact::findOrFail($contactId);
+        $contacts = Contact::all();
+        return view('sales.create', compact('contacts'));
+    }
 
-        $validatedData = $request->validate([
-            'amount' => 'required|numeric|min:0',
-            'invoice_number' => 'required|string|unique:sales,invoice_number'
+    public function store(Request $request)
+    {
+        $request->validate([
+            'contact_id' => 'required|exists:contacts,id',
+            'amount' => 'required|numeric',
+            'invoice_date' => 'required|date',
         ]);
 
-        $sale = new Sale($validatedData);
-        $contact->sales()->save($sale);
+        Sale::create($request->all());
 
-        return response()->json($sale, 201);
+        return redirect()->route('sales.index')
+            ->with('success', 'Sale record created successfully.');
     }
 
-    // Menampilkan penjualan berdasarkan ID
-    public function show($id)
+    public function destroy(Sale $sale)
     {
-        $sale = Sale::findOrFail($id);
-        return response()->json($sale, 200);
-    }
+        $sale->delete();
 
-    // Mengupdate penjualan
-    public function update(Request $request, $id)
-    {
-        $sale = Sale::findOrFail($id);
-
-        $validatedData = $request->validate([
-            'amount' => 'required|numeric|min:0',
-            'invoice_number' => 'required|string|unique:sales,invoice_number,' . $id
-        ]);
-
-        $sale->update($validatedData);
-        return response()->json($sale, 200);
-    }
-
-    // Menghapus penjualan
-    public function destroy($id)
-    {
-        Sale::destroy($id);
-        return response()->json(null, 204);
+        return redirect()->route('sales.index')
+            ->with('success', 'Sale record deleted successfully.');
     }
 }

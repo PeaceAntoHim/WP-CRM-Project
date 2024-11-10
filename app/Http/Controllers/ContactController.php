@@ -7,53 +7,55 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    // Menampilkan semua kontak
     public function index()
     {
-        return Contact::with(['interactions', 'sales'])->get();
+        $contacts = Contact::all();
+        return view('contacts.index', compact('contacts'));
     }
 
-    // Menyimpan kontak baru
+    public function create()
+    {
+        return view('contacts.create');
+    }
+
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:100',
-            'company' => 'nullable|string|max:100',
-            'email' => 'required|email|unique:contacts,email',
-            'phone_number' => 'nullable|string|max:15'
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
         ]);
 
-        $contact = Contact::create($validatedData);
-        return response()->json($contact, 201);
+        Contact::create($request->all());
+
+        return redirect()->route('contacts.index')
+            ->with('success', 'Contact created successfully.');
     }
 
-    // Menampilkan kontak berdasarkan ID
-    public function show($id)
+    public function edit(Contact $contact)
     {
-        $contact = Contact::with(['interactions', 'sales'])->findOrFail($id);
-        return response()->json($contact, 200);
+        return view('contacts.edit', compact('contact'));
     }
 
-    // Mengupdate data kontak
-    public function update(Request $request, $id)
+    public function update(Request $request, Contact $contact)
     {
-        $contact = Contact::findOrFail($id);
-
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:100',
-            'company' => 'nullable|string|max:100',
-            'email' => 'required|email|unique:contacts,email,' . $id,
-            'phone_number' => 'nullable|string|max:15'
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
         ]);
 
-        $contact->update($validatedData);
-        return response()->json($contact, 200);
+        $contact->update($request->all());
+
+        return redirect()->route('contacts.index')
+            ->with('success', 'Contact updated successfully.');
     }
 
-    // Menghapus kontak
-    public function destroy($id)
+    public function destroy(Contact $contact)
     {
-        Contact::destroy($id);
-        return response()->json(null, 204);
+        $contact->delete();
+
+        return redirect()->route('contacts.index')
+            ->with('success', 'Contact deleted successfully.');
     }
 }

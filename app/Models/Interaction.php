@@ -9,7 +9,7 @@ class Interaction extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['contact_id', 'type', 'notes'];
+    protected $fillable = ['contact_id', 'type', 'note'];
 
     public function contact()
     {

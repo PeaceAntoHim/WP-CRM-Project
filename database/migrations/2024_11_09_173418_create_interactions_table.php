@@ -10,9 +10,9 @@ class CreateInteractionsTable extends Migration
     {
         Schema::create('interactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('contact_id')->constrained()->onDelete('cascade');
+            $table->foreignId('contact_id')->constrained('contacts');
             $table->enum('type', ['email', 'phone', 'meeting']);
-            $table->text('notes')->nullable();
+            $table->text('note');
             $table->timestamps();
         });
     }
