@@ -40,9 +40,22 @@
             }
         });
 
+
+
         // Customer Lifetime Value Chart
         const ltvData = @json($ltvData);
         const ltvChartCtx = document.getElementById('ltvChart').getContext('2d');
+
+        function generateRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        const colors = ltvData.map(() => generateRandomColor());
         new Chart(ltvChartCtx, {
             type: 'pie',
             data: {
@@ -50,7 +63,7 @@
                 datasets: [{
                     label: 'Lifetime Value',
                     data: ltvData.map(l => l.lifetime_value),
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                    backgroundColor: colors
                 }]
             }
         });
