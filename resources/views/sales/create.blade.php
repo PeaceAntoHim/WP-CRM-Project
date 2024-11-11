@@ -16,13 +16,22 @@
                 </select>
             </div>
             <div class="mb-4">
-                <label class="block text-gray-700 font-medium" for="amount">Amount</label>
-                <input type="number" name="amount" step="0.01"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-medium" for="invoice_date">Invoice Date</label>
-                <input type="date" name="invoice_date" class="w-full px-4 py-2 border rounded-lg focus:outline-none">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium" for="amount">Amount</label>
+                    <input type="number" name="amount" step="0.01"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium" for="invoice_date">Invoice Date</label>
+                    <input type="date" name="invoice_date" class="w-full px-4 py-2 border rounded-lg focus:outline-none">
+                </div>
+                <label class="block text-gray-700 font-medium" for="status">Status</label>
+                <select name="status" class="w-full px-4 py-2 border rounded-lg focus:outline-none">
+                    <option value="">Select status</option>
+                    @foreach ($status as $key => $label)
+                        <option value="{{ $key }}">{{ $label }}</option>
+                    @endforeach
+                </select>
             </div>
             <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save
                 Sale</button>

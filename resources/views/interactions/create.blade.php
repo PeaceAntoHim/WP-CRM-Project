@@ -15,7 +15,11 @@
             </div>
             <div class="mb-4">
                 <label for="type" class="block text-sm font-medium">Type</label>
-                <input type="text" name="type" required class="w-full border-gray-300 rounded px-4 py-2 mt-1">
+                <select name="type" required class="w-full border-gray-300 rounded px-4 py-2 mt-1">
+                    @foreach ($types as $key => $label)
+                        <option value="{{ $key }}">{{ $label }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-4">
                 <label for="note" class="block text-sm font-medium">Note</label>

@@ -9,26 +9,43 @@ use Illuminate\Http\Request;
 class InteractionController extends Controller
 {
     // Menampilkan semua interaksi untuk kontak tertentu
-    public function index($contactId)
+    public function index()
     {
-        $contact = Contact::findOrFail($contactId);
-        return $contact->interactions;
+        $interactions = Interaction::all();
+        return view('interactions.index', compact('interactions'));
     }
 
     // Menyimpan interaksi baru
-    public function store(Request $request, $contactId)
+    public function store(Request $request)
     {
-        $contact = Contact::findOrFail($contactId);
-
         $validatedData = $request->validate([
-            'type' => 'required|in:email,phone,meeting',
-            'notes' => 'nullable|string'
+            'type' => 'required',
+            'contact_id' => 'required', // Ensures contact_id exists in contacts table
+            'note' => 'nullable|string'
         ]);
 
-        $interaction = new Interaction($validatedData);
-        $contact->interactions()->save($interaction);
+        // Create and save the interaction directly to the interactions table
+        Interaction::create([
+            'type' => $validatedData['type'],
+            'contact_id' => $validatedData['contact_id'], // This will associate the interaction with the contact
+            'note' => $validatedData['note']
+        ]);
 
-        return response()->json($interaction, 201);
+        // Redirect to the interactions index with a success message
+        return redirect()->route('interactions.index')
+            ->with('success', 'Interaction created successfully.');
+    }
+
+
+    public function create()
+    {
+        $types = [
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'meeting' => 'Meeting'
+        ];
+        $contacts = Contact::all();
+        return view('interactions.create', compact('contacts', 'types'));
     }
 
     // Menampilkan interaksi berdasarkan ID

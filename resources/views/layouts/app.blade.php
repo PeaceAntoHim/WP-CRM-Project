@@ -9,25 +9,32 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-800">
-    <nav class="bg-blue-500 p-4 shadow-lg">
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="{{ url('/') }}" class="text-white text-lg font-bold">CRM Application</a>
-            <ul class="flex space-x-4">
+            <a href="{{ url('/') }}" class="text-white text-xl font-bold">CRM Application</a>
+            <ul class="flex space-x-6">
                 <li><a href="{{ route('contacts.index') }}" class="text-white hover:text-gray-200">Contacts</a></li>
                 <li><a href="{{ route('interactions.index') }}" class="text-white hover:text-gray-200">Interactions</a>
                 </li>
                 <li><a href="{{ route('sales.index') }}" class="text-white hover:text-gray-200">Sales</a></li>
+                <li><a href="{{ route('reports.index') }}" class="text-white hover:text-gray-200">Reports</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container mx-auto py-6">
+    <!-- Main Content -->
+    <div class="flex-grow container mx-auto py-8">
         @yield('content')
     </div>
 
-    <footer class="bg-gray-800 p-4 mt-8 text-center text-gray-300">
-        CRM Application &copy; {{ date('Y') }}
+    <!-- Footer -->
+    <footer class="bg-gray-800 p-4 text-center text-gray-300 mt-8">
+        <div class="container mx-auto">
+            <p>CRM Application &copy; {{ date('Y') }}. All rights reserved.</p>
+            <p class="text-sm mt-1">Designed with ❤️ by Frans Sebastian</p>
+        </div>
     </footer>
 </body>
 

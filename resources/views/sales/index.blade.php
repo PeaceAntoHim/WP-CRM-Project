@@ -12,6 +12,7 @@
                     <tr>
                         <th class="py-3 px-6 font-medium text-gray-600">Contact Name</th>
                         <th class="py-3 px-6 font-medium text-gray-600">Amount</th>
+                        <th class="py-3 px-6 font-medium text-gray-600">Status</th>
                         <th class="py-3 px-6 font-medium text-gray-600">Invoice Date</th>
                         <th class="py-3 px-6 font-medium text-gray-600">Actions</th>
                     </tr>
@@ -21,6 +22,20 @@
                         <tr class="border-t">
                             <td class="py-3 px-6">{{ $sale->contact->name }}</td>
                             <td class="py-3 px-6">${{ number_format($sale->amount, 2) }}</td>
+                            <td class="py-3 px-6">{{ $sale->status }}</td>
                             <td class="py-3 px-6">{{ \Carbon\Carbon::parse($sale->invoice_date)->format('d/m/Y') }}</td>
                             <td class="py-3 px-6">
-                                <form actio
+                                <!-- Ensure form action is properly set -->
+                                <form action="{{ route('sales.destroy', $sale->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+@endsection

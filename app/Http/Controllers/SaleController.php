@@ -16,8 +16,14 @@ class SaleController extends Controller
 
     public function create()
     {
+        $status = [
+            'pending' => 'Pending',
+            'cancle' => 'Cancle',
+            'inprogress' => 'In Progress',
+            'completed' => 'Completed'
+        ];
         $contacts = Contact::all();
-        return view('sales.create', compact('contacts'));
+        return view('sales.create', compact('contacts', 'status'));
     }
 
     public function store(Request $request)
@@ -25,6 +31,7 @@ class SaleController extends Controller
         $request->validate([
             'contact_id' => 'required|exists:contacts,id',
             'amount' => 'required|numeric',
+            'status' => 'required|string',
             'invoice_date' => 'required|date',
         ]);
 
